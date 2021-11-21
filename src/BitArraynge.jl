@@ -1,5 +1,5 @@
+# This file is a part of BitArraynge.jl, licensed under the MIT License (MIT).
 baremodule BitArraynge
-
 	
 	# stuff that is given more methods
 	import Base: push!, append!, BitMatrix, BitVector
