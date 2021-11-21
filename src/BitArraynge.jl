@@ -1,15 +1,13 @@
 # This file is a part of BitArraynge.jl, licensed under the MIT License (MIT).
 baremodule BitArraynge
 	
-	# stuff that is given more methods
-	import Base: push!, append!, BitMatrix, BitVector
-	# stuff needed to do so
-	import Base: @inline, StepRange, Vector, |>, -, range, hcat, vcat
+	using Base
 	using BitOperations
 
+	#= Credit to Gandalf#4004 in the Humans of Julia discord
+	   I might use this at some point =#
 	# _cvt_int(x) = (bv = BitVector((false,)) ; bv.chunks[1] = UInt64(x) ; bv.len = 64 ; bv)
 
-	
 	_bitindices(I) = range(bsizeof(I)-1, step=(-1), stop=0)
 
 	export bitsof
@@ -18,32 +16,37 @@ baremodule BitArraynge
 	@inline bitsof(n::I) where {I <: Integer} = bget.(n, _bitindices(I))
 	
 	
-	export push!
-	function push!(V::BitVector, n::I, b_inds::StepRange=0:1:0) where I <: Integer
-		append!(V, bitsof(n))
+	export appendbitsof!
+	function appendbitsof!(V::BitVector, n::I) where I <: Integer
+		append!(V, bitsof(n, _bitindices(I)))
+	end
+
+	export appendbitsof!
+	function appendbitsof!(V::BitVector, n::I, bitindices::StepRange) where I <: Integer
+		append!(V, bitsof(n, bitindices))
 	end
 	
-	
-	export append!
-	function append!(V::BitVector, Ns::Vector{I}) where I <: Integer
-		b_inds = _bitindices(I)
-		for n in Ns
-			push!(V, n, b_inds)
+	export appendbitsof!
+	function appendbitsof!(V::BitVector, N::Vector{I}) where I <: Integer
+		bitindices = _bitindices(I)
+		for n in N
+			appendbitsof!(V, n, bitindices)
 		end
 	end
 	
 	
-	export BitMatrix
-	function BitMatrix(V::Vector{I}) where {I <: Integer}
+	export bmat_from_ints
+	function bmat_from_ints(V::Vector{I}) where {I <: Integer}
 		hcat((V .|> bitsof)...)
 	end
 	
 	
-	export BitVector
-	function BitVector(V::Vector{I}) where {I <: Integer}
+	export bvec_from_ints
+	function bvec_from_ints(V::Vector{I}) where {I <: Integer}
 		vcat((v .|> bitsof)...)
 	end
 
-	@inline BitVector(n::I) where {I <: Integer} = bitsof.(n)
+	export bvec_from_int
+	@inline bvec_from_int(n::I) where {I <: Integer} = bitsof.(n)
 	
 end # module
