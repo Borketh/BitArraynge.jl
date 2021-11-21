@@ -17,16 +17,10 @@ baremodule BitArraynge
 	
 	
 	export appendbitsof!
-	function appendbitsof!(V::BitVector, n::I) where I <: Integer
-		append!(V, bitsof(n, _bitindices(I)))
-	end
+	appendbitsof!(V::BitVector, n::I) where I <: Integer = append!(V, bitsof(n, _bitindices(I)))
 
-	export appendbitsof!
-	function appendbitsof!(V::BitVector, n::I, bitindices::StepRange) where I <: Integer
-		append!(V, bitsof(n, bitindices))
-	end
+	appendbitsof!(V::BitVector, n::I, bitindices::StepRange) where I <: Integer = append!(V, bitsof(n, bitindices))
 	
-	export appendbitsof!
 	function appendbitsof!(V::BitVector, N::Vector{I}) where I <: Integer
 		bitindices = _bitindices(I)
 		for n in N
