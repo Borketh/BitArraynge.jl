@@ -1,0 +1,1 @@
+julia --project -E "import Pkg; Pkg.instantiate(); Pkg.build()"

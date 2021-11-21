@@ -1,1 +1,1 @@
-assert true && false
+@assert true
